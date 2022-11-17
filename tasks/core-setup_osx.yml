@@ -1,7 +1,7 @@
 - name: Install core packages via brew casks
   community.general.homebrew_cask:
     name: "{{ item }}"
-  ignore_errors: yes
+  ignore_errors: true
   with_items:
     # - 1password
     - datagrip
@@ -12,6 +12,7 @@
     - slack
     # - sublime-text
     - visual-studio-code
+    - openvpn
     # - vlc
     # - tuple
 
@@ -28,9 +29,9 @@
       'gnu-time',
       'gpg',
       # 'htop', #an interactive process viewer
-      'imagemagick@6',
-      'libtool',
-      'libxslt',
+      # 'imagemagick@6',
+      # 'libtool',
+      # 'libxslt',
       'libyaml',
       'mas', #Mac App Store command line interface
       'openssl' ,
@@ -41,12 +42,13 @@
       'tmux',
       'unixodbc',
       'unzip',
-      'vim',
-      'watchman',
+      # 'vim',
+      # 'watchman',
       'xz',
       'yarn',
       'zlib',
       'zsh',
+      'go@1.19'
     ]
     state: present
     update_homebrew: yes
@@ -83,19 +85,19 @@
     owner: "{{ lookup('env', 'USER') }}"
     force: yes
 
-- name: Create a default VSCode configuration
-  template:
-    src: templates/vscode-settings.json.j2
-    dest: /Users/{{ lookup('env', 'USER') }}/Library/Application Support/Code/User/settings.json
-    owner: "{{ lookup('env', 'USER') }}"
-    force: yes
+# - name: Create a default VSCode configuration
+#   template:
+#     src: templates/vscode-settings.json.j2
+#     dest: /Users/{{ lookup('env', 'USER') }}/Library/Application Support/Code/User/settings.json
+#     owner: "{{ lookup('env', 'USER') }}"
+#     force: yes
 
-- name: Create a default VSCode keuybinding configuration
-  template:
-    src: templates/vscode-keybindings.json.j2
-    dest: /Users/{{ lookup('env', 'USER') }}/Library/Application Support/Code/User/keybindings.json
-    owner: "{{ lookup('env', 'USER') }}"
-    force: yes
+# - name: Create a default VSCode keuybinding configuration
+#   template:
+#     src: templates/vscode-keybindings.json.j2
+#     dest: /Users/{{ lookup('env', 'USER') }}/Library/Application Support/Code/User/keybindings.json
+#     owner: "{{ lookup('env', 'USER') }}"
+#     force: yes
 
 # Add something which ensures path is set here
 - name: Install VSCode extensions
