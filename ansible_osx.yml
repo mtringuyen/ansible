@@ -1,0 +1,47 @@
+- hosts: localhost
+  vars:
+    source_key: "./.ssh/id_ed25519"
+    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
+    personal: "{{ lookup('env', 'HOME') }}/personal"
+  pre_tasks:
+    - name: Install homebrew
+      include_role:
+        name: geerlingguy.mac.homebrew
+      tags:
+      - install
+      - core
+
+    - name: Make sure homebrew bin is in path
+      ansible.builtin.lineinfile:
+        path: /etc/paths
+        state: present
+        line: '/opt/homebrew/bin'
+      become: true
+      become_user: root
+      tags:
+      - install
+      - core
+
+    - name: 'add custom homebrew repos'
+      community.general.homebrew_tap:
+        name: [
+          adoptopenjdk/openjdk,
+          homebrew/cask-versions,
+          thoughtbot/formulae,
+          weaveworks/tap,
+        ]
+      tags:
+      - install
+      - core
+
+  tasks:
+    - include: tasks/ssh.yml
+    - include: tasks/git-setup.yml
+    - include: tasks/core-setup_osx.yml
+    # - include: tasks/node-setup.yml
+    # - include: tasks/npm-packages.yml
+    # - include: tasks/zsh-setup.yml
+    # - include: tasks/slack-setup.yml
+    # - include: tasks/dotfiles.yml
+    # - include: tasks/productivity-tools.yml
+
